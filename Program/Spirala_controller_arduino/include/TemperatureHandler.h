@@ -18,7 +18,7 @@
 
 extern uint8_t lower_temperature_limit;
 extern uint8_t high_temperature_limit;
-extern uint8_t actual_temperature_offset;
+extern int8_t actual_temperature_offset;
 extern float measured_temperature;
 
 const uint8_t temp_reading_pin = 3;

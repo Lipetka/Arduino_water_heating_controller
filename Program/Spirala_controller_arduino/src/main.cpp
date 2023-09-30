@@ -35,11 +35,6 @@
 #define MAX_RELAY_TIMER 21600000 // 6 hours
 #define MIN_RELAY_TIMER 10800000 // 3 hours
 
-// SCHEDULER CONTROL
-// temperature reading period
-#define TEMP_READ_PERIOD 1000 // [ms]
-
-
 // FUNCTIONS ===========================================
 
 // scheduler callback
@@ -49,13 +44,11 @@ void readTempCallback();
 // GLOBAL VARIABLES ====================================
 unsigned long debugRefreshTimer = 0;
 
-// Variables used by temperature monitoring
-unsigned long temperature_read_rate = 10000;
-
 // Variables used by display control
 uint8_t changingValue = 0;
-unsigned long displayRefreshTimer = 0; // used to control refresh rate of display
-const int display_refresh_rate = 100;
+
+const int display_refresh_rate = 250;
+unsigned long temperature_read_rate = 10000;
 
 // global control variables
 int8_t currentPosition = 0;
@@ -89,11 +82,11 @@ void loop() {
     Serial.println("TBD");
     // output measured temperature
     Serial.print("Current measured temperature: ");
-    Serial.println(get_current_temperature_info());
+    Serial.println(measured_temperature);
     // output other info about temperature
-    Serial.print(" Lower limit: ");
+    Serial.print("Lower limit: ");
     Serial.print(get_temperature_info(LOW_LIMIT));
-    Serial.print("Higher limit: ");
+    Serial.print(" Higher limit: ");
     Serial.print(get_temperature_info(HIGH_LIMIT));
     Serial.print(" Temp offset: ");
     Serial.println(get_temperature_info(OFFSET));

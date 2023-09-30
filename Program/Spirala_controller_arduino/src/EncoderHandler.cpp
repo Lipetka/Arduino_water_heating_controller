@@ -37,25 +37,25 @@ void menuSelect() {
  */
 int changeValue(uint8_t chosenPosition){
 
-  /*
+
   switch (chosenPosition)
   {
   case 0:
-    lowerTempLimit += encoderValueRead();
+    lower_temperature_limit += encoderValueRead();
     return 1;
 
   case 1:
-    actualTempOffset -= encoderValueRead();
+    actual_temperature_offset += encoderValueRead();
     return 1;
   
   case 2:
-    higherTempLimit += encoderValueRead();
+    high_temperature_limit += encoderValueRead();
     return 1;
 
   default:
     return 0;
   }
-  */
+
 }
 
 /**
@@ -68,21 +68,21 @@ void checkButtonPress(){
     // check button press, ignore button press if press wasnt addressed yet -----------------
   if(digitalRead(ENCODER_BUTTON_PIN) == LOW && changingValue == 0){
     changingValue = 1;
-    while(digitalRead(ENCODER_BUTTON_PIN) == LOW){} //TODO: get rid of while
+    while(digitalRead(ENCODER_BUTTON_PIN) == LOW){}
 
   }else if(digitalRead(ENCODER_BUTTON_PIN) == LOW && changingValue == 1){
     changingValue = 0;
     myEncoder.write(0); // to reset arrow to zero position
 
-    /* TODO: write to eeprom
+    
     if(currentPosition == 0){
-      set_lower_temperature_limit();
+      set_lower_temperature_limit(lower_temperature_limit);
     }else if(currentPosition == 1){
-      EEPROM.put(TEMP_OFFSET_EEPROM_ADDRESS, actualTempOffset);
+      set_temperature_offset(actual_temperature_offset);
     }else if(currentPosition == 2){
-      EEPROM.put(TEMP_HIGH_ADDRESS, higherTempLimit);
+      set_higher_temperature_limit(high_temperature_limit);
     }
-    */
+    
     while(digitalRead(ENCODER_BUTTON_PIN) == LOW){} //TODO: get rid of while
   }
 }

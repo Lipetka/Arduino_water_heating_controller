@@ -12,7 +12,7 @@
 
 uint8_t lower_temperature_limit;
 uint8_t high_temperature_limit;
-uint8_t actual_temperature_offset;
+int8_t actual_temperature_offset;
 float measured_temperature;
 
 // create objects
@@ -33,7 +33,7 @@ void temperature_reading_init(){
 
 void read_temperature(){
   sensors.requestTemperatures();
-  measured_temperature = sensors.getTempCByIndex(0) - actual_temperature_offset;
+  measured_temperature = sensors.getTempCByIndex(0);
 }
 
 
@@ -57,5 +57,5 @@ int get_temperature_info(uint8_t requested_value){
 
 
 float get_current_temperature_info(){
-  return measured_temperature;
+  return measured_temperature + actual_temperature_offset;
 }

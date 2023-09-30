@@ -27,7 +27,7 @@ void displayInit(){
  * 
  * @param changingValue Is chosen variable being changed?
  */
-void displayShow(uint8_t chosenVariable, bool changingValue){
+void displayShow(uint8_t currentPosition, bool changingValue){
     lcd.clear();
 
     lcd.setCursor(0,0); // COL, ROW
@@ -38,7 +38,7 @@ void displayShow(uint8_t chosenVariable, bool changingValue){
     lcd.setCursor(5,0);
     lcd.print("AKT");
     lcd.setCursor(5,1);
-    lcd.print(measured_temperature,2);
+    lcd.print(get_current_temperature_info(),2);
 
 
     lcd.setCursor(12,0);
@@ -47,7 +47,7 @@ void displayShow(uint8_t chosenVariable, bool changingValue){
     lcd.print(high_temperature_limit);
 
     // highlight handle
-    switch (chosenVariable)
+    switch (currentPosition)
     {
     case 0:
 

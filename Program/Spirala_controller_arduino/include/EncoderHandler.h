@@ -13,8 +13,8 @@
 #include <Arduino.h>
 #include <stdio.h>
 #include <Encoder.h>
-//#include <TemperatureHandler.h>
-//#include <EEPROMHandler.h>
+#include <TemperatureHandler.h>
+#include <EEPROMHandler.h>
 
 #define ENCODER_BUTTON_PIN 7
 #define ENCODER_A_PIN 6
