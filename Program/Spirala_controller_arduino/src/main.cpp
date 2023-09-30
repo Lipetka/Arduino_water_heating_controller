@@ -3,7 +3,7 @@
  * @author Samuel Liptak
  * @brief Main file for hysteresis (bang-bang, 2 step,...) controller
  * @version 0.1
- * @date 2023-08-18
+ * @date 2023-09-30
  * 
  */
 // INCLUDES ============================================
@@ -17,7 +17,7 @@
 #include <EEPROM.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
-//#include "TaskScheduler.h"
+#include "TaskScheduler.h"
 
 
 // DEFINES =============================================
