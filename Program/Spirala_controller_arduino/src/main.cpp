@@ -15,10 +15,8 @@
 #include "EncoderHandler.h"
 #include <stdio.h>
 #include <EEPROM.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
 #include "TaskScheduler.h"
-
+#include "TemperatureHandler.h"
 
 // DEFINES =============================================
 
@@ -26,8 +24,6 @@
 
 // Pins
 #define RELAY_PIN 4
-#define TEMP_PIN 3
-#define FAKE_PULLUP 2 // used for setting pullup resistor
 
 // temperature reading period
 #define TEMP_READ_PERIOD 1000 // [ms]
@@ -41,8 +37,6 @@
 
 
 // FUNCTIONS ===========================================
-
-void readTemp(float* actualTemperature);
 
 // scheduler callback
 void displayTaskCallback();
@@ -74,10 +68,6 @@ int8_t currentPosition = 0;
 uint8_t maxMenuCount = 2; // number of menu options (0 included, 2 => 3 items)
 
 // OBJECTS =============================================
-
-OneWire oneWire(TEMP_PIN);
-DallasTemperature sensors(&oneWire);
-
 Scheduler scheduler;
 
 Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
@@ -86,14 +76,11 @@ Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback,
 // MAIN CODE ===============================================
 
 void setup() {
+  temperature_reading_init();
   // initialize pins
   pinMode(ENCODER_BUTTON_PIN, INPUT);
   pinMode(RELAY_PIN, OUTPUT);
-  pinMode(FAKE_PULLUP, OUTPUT);
-  digitalWrite(FAKE_PULLUP, HIGH);
-  sensors.begin();
   displayInit();  // initialize display (external file)
-  readTemp(&tempActual); // read temp to start system with correct temperature
   Serial.begin(9600);
   scheduler.startNow();
 }
@@ -140,17 +127,10 @@ void loop() {
   }
 }
 
-
-void readTemp(float *tempActual){
-  // TODO: get temp in thread 
-  sensors.requestTemperatures();
-  *tempActual = sensors.getTempCByIndex(0) - actualTempOffset;
-}
-
 void displayTaskCallback(){
   displayShow(lowerTempLimit, higherTempLimit, tempActual, currentPosition, changingValue);
 }
 
 void readTempCallback(){
-  readTemp(&tempActual);
+  read_temperature(&tempActual);
 }
