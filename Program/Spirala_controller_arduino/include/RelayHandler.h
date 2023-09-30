@@ -15,13 +15,14 @@
 #include <stdio.h>
 
 extern bool heater_on_flag;
-
-const int relay_pin = 4;
-
+extern bool emergency_shutdown_flag;
 
 void heater_relay_init();
 void turn_heater_on();
 void turn_heater_off();
+void heater_error_handle();
+
+
 
 
 #endif

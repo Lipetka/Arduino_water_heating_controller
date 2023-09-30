@@ -26,9 +26,6 @@
 
 #define DEBUG // keep defined
 
-#define MAX_RELAY_TIMER 21600000 // 6 hours
-#define MIN_RELAY_TIMER 10800000 // 3 hours
-
 // FUNCTIONS ===========================================
 
 // scheduler callback
@@ -36,9 +33,9 @@ void displayTaskCallback();
 void readTempCallback();
 void encoderTaskCallback();
 void debugTaskCallback();
+void checkRelayTaskCallback();
 
 // GLOBAL VARIABLES ====================================
-unsigned long debugRefreshTimer = 0;
 
 // Variables used by display control
 uint8_t changingValue = 0;
@@ -59,6 +56,7 @@ Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback
 Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
 Task encoderTask(encoder_read_rate, TASK_FOREVER, &encoderTaskCallback, &scheduler, true);
 Task debugTask(debug_print_rate, TASK_FOREVER, &debugTaskCallback, &scheduler, true);
+Task checkRelayTask(1000, TASK_FOREVER, &checkRelayTaskCallback, &scheduler, true);
 
 // MAIN CODE ===============================================
 
@@ -106,6 +104,10 @@ void readTempCallback(){
 
 }
 
+void checkRelayTaskCallback(){
+  heater_error_handle();
+}
+
 void debugTaskCallback(){
     // print time
     Serial.print("Current time: ");
@@ -123,5 +125,4 @@ void debugTaskCallback(){
     Serial.print("Relay state: ");
     Serial.println(heater_on_flag);
     Serial.println("-----------------------");
-    debugRefreshTimer = millis();
 }
