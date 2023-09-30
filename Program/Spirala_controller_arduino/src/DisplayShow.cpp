@@ -25,30 +25,26 @@ void displayInit(){
 /**
  * @brief Controls what will be shown on display
  * 
- * @param tempLimitLow Lower temp limit
- * @param tempLimitHigh Higher temp limit
- * @param tempActual Current measured temperature
- * @param chosenVariable Current menu position
  * @param changingValue Is chosen variable being changed?
  */
-void displayShow(uint16_t tempLimitLow, uint16_t tempLimitHigh, float tempActual, uint8_t chosenVariable, uint8_t changingValue){
+void displayShow(uint8_t chosenVariable, bool changingValue){
     lcd.clear();
 
     lcd.setCursor(0,0); // COL, ROW
     lcd.print("MIN");
     lcd.setCursor(0,1);
-    lcd.print(tempLimitLow);
+    lcd.print(lower_temperature_limit);
 
     lcd.setCursor(5,0);
     lcd.print("AKT");
     lcd.setCursor(5,1);
-    lcd.print(tempActual,2);
+    lcd.print(measured_temperature,2);
 
 
     lcd.setCursor(12,0);
     lcd.print("MAX");
     lcd.setCursor(12,1);
-    lcd.print(tempLimitHigh);
+    lcd.print(high_temperature_limit);
 
     // highlight handle
     switch (chosenVariable)

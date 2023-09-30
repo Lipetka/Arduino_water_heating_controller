@@ -2,7 +2,7 @@
  * @file TemperatureHandler.c
  * @author Samuel Liptak
  * @brief Source file for temperature handling
- * @version 0.1
+ * @version 0.2
  * @date 2023-09-30
  * 
  */
@@ -19,6 +19,8 @@ float measured_temperature;
 OneWire oneWire(temp_reading_pin);
 DallasTemperature sensors(&oneWire);
 
+
+
 void temperature_reading_init(){
   // define fake pullup pin as output and set it to +5V
   pinMode(fake_pullup_pin, OUTPUT);
@@ -27,6 +29,7 @@ void temperature_reading_init(){
   high_temperature_limit = get_temperature_from_EEPROM(HIGH_LIMIT);
   actual_temperature_offset = get_temperature_from_EEPROM(OFFSET);
 }
+
 
 void read_temperature(){
   sensors.requestTemperatures();
@@ -51,6 +54,7 @@ int get_temperature_info(uint8_t requested_value){
     break;
   }
 }
+
 
 float get_current_temperature_info(){
   return measured_temperature;

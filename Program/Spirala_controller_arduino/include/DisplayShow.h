@@ -13,10 +13,11 @@
 #include <Arduino.h>
 #include <stdio.h>
 #include <LiquidCrystal_I2C.h>
+#include "TemperatureHandler.h"
 
 #define DISPLAY_REFRESH_RATE 300
 
-void displayShow(uint16_t tempLimitLow, uint16_t tempLimitHigh, float tempActual, uint8_t chosenVariable, uint8_t changingValue);
+void displayShow(uint8_t chosenVariable, bool changingValue);
 void displayInit();
 
 

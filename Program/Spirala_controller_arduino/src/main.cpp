@@ -6,13 +6,16 @@
  * @date 2023-09-30
  * 
  */
+
 // INCLUDES ============================================
 
+// BASIC LIBRARIES
 #include <Arduino.h>
 #include <Wire.h> 
 #include <stdio.h>
 #include "TaskScheduler.h"
 
+// PROJECT SPECIFIC LIBRARIES
 #include "DisplayShow.h"
 #include "EncoderHandler.h"
 #include "TemperatureHandler.h"
@@ -20,13 +23,11 @@
 
 // DEFINES =============================================
 
-#define DEBUG
+#define DEBUG // keep defined
 
 // Pins
 #define RELAY_PIN 4
 
-// temperature reading period
-#define TEMP_READ_PERIOD 1000 // [ms]
 
 // RELAY control
 #define RELAY_ON digitalWrite(RELAY_PIN,HIGH)
@@ -34,6 +35,9 @@
 #define MAX_RELAY_TIMER 21600000 // 6 hours
 #define MIN_RELAY_TIMER 10800000 // 3 hours
 
+// SCHEDULER CONTROL
+// temperature reading period
+#define TEMP_READ_PERIOD 1000 // [ms]
 
 
 // FUNCTIONS ===========================================
@@ -70,7 +74,7 @@ void setup() {
   // initialize pins
   //pinMode(ENCODER_BUTTON_PIN, INPUT);
   //pinMode(RELAY_PIN, OUTPUT);
-  //displayInit();  // initialize display (external file)
+  displayInit();  // initialize display (external file)
   Serial.begin(9600);
   scheduler.startNow();
 }
@@ -87,10 +91,10 @@ void loop() {
     Serial.print("Current measured temperature: ");
     Serial.println(get_current_temperature_info());
     // output other info about temperature
-    Serial.print("Higher limit: ");
-    Serial.print(get_temperature_info(HIGH_LIMIT));
     Serial.print(" Lower limit: ");
     Serial.print(get_temperature_info(LOW_LIMIT));
+    Serial.print("Higher limit: ");
+    Serial.print(get_temperature_info(HIGH_LIMIT));
     Serial.print(" Temp offset: ");
     Serial.println(get_temperature_info(OFFSET));
     Serial.println("-----------------------");
@@ -99,18 +103,18 @@ void loop() {
   #endif
  
   // Handle encoder -------------------------------------------
-  //checkButtonPress();
-  //if(changingValue){
-  //  changeValue(currentPosition);
-  //}else{
-  //  menuSelect();
-  //}
+  checkButtonPress();
+  if(changingValue){
+    changeValue(currentPosition);
+  }else{
+    menuSelect();
+  }
 
   scheduler.execute();
 }
 
 void displayTaskCallback(){
-  //displayShow();
+  displayShow(currentPosition, changingValue);
 }
 
 void readTempCallback(){
