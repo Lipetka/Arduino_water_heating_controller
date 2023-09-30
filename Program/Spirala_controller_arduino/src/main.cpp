@@ -115,4 +115,11 @@ void displayTaskCallback(){
 
 void readTempCallback(){
   read_temperature();
+  
+  if(get_calibrated_temperature_info() < lower_temperature_limit){
+    turn_heater_on();
+  }else if(get_calibrated_temperature_info() > high_temperature_limit){
+    turn_heater_off();
+  }
+
 }

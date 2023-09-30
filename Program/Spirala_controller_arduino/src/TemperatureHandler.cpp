@@ -56,6 +56,6 @@ int get_temperature_info(uint8_t requested_value){
 }
 
 
-float get_current_temperature_info(){
+float get_calibrated_temperature_info(){
   return measured_temperature + actual_temperature_offset;
 }

@@ -27,6 +27,6 @@ const uint8_t fake_pullup_pin = 2;
 void temperature_reading_init();
 void read_temperature();
 int get_temperature_info(uint8_t requested_value);
-float get_current_temperature_info();
+float get_calibrated_temperature_info();
 
 #endif

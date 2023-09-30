@@ -38,7 +38,7 @@ void displayShow(uint8_t currentPosition, bool changingValue){
     lcd.setCursor(5,0);
     lcd.print("AKT");
     lcd.setCursor(5,1);
-    lcd.print(get_current_temperature_info(),2);
+    lcd.print(get_calibrated_temperature_info(),2);
 
 
     lcd.setCursor(12,0);
