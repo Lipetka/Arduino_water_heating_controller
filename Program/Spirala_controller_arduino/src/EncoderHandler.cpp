@@ -14,6 +14,10 @@ Encoder myEncoder(ENCODER_A_PIN, ENCODER_B_PIN);
 
 long oldEncoderValue = 0;
 
+void encoderInit(){
+  pinMode(ENCODER_BUTTON_PIN, INPUT);
+}
+
 /**
  * @brief Handles menu item sweep with overflow protection.
  * 

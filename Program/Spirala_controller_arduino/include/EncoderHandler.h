@@ -16,14 +16,15 @@
 #include <TemperatureHandler.h>
 #include <EEPROMHandler.h>
 
-#define ENCODER_BUTTON_PIN 7
-#define ENCODER_A_PIN 6
-#define ENCODER_B_PIN 5
+const int ENCODER_BUTTON_PIN = 7;
+const int ENCODER_A_PIN = 6;
+const int ENCODER_B_PIN = 5;
 
 extern uint8_t maxMenuCount;
 extern int8_t currentPosition;
 extern uint8_t changingValue;
 
+void encoderInit();
 void menuSelect();
 void checkButtonPress();
 int changeValue(uint8_t currentPosition);
