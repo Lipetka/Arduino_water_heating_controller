@@ -1,13 +1,29 @@
 
 #include "EEPROMHandler.h"
 
-void read_temperature_constants(uint8_t* lower_temperature_limit, 
-                            uint8_t* high_temperature_limit,
-                            uint8_t* actual_temperature_offset){
+int get_temperature_from_EEPROM(uint8_t requested_data){
+    uint8_t return_value;
 
-    EEPROM.get(TEMP_OFFSET_EEPROM_ADDRESS, actual_temperature_offset);
-    EEPROM.get(TEMP_LOW_ADDRESS, lower_temperature_limit);
-    EEPROM.get(TEMP_HIGH_ADDRESS, high_temperature_limit);                            
+    switch (requested_data)
+    {
+    case LOW_LIMIT:
+        EEPROM.get(TEMP_LOW_ADDRESS, return_value);
+        break;
+
+    case HIGH_LIMIT:
+        EEPROM.get(TEMP_HIGH_ADDRESS, return_value);
+        break; 
+
+    case OFFSET:
+        EEPROM.get(TEMP_OFFSET_EEPROM_ADDRESS, return_value);
+        break;
+
+    default:
+        return_value = 0;
+        break;
+    }
+
+    return return_value;                    
 }
 
 

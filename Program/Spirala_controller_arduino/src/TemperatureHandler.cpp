@@ -10,8 +10,12 @@
 
 #include <TemperatureHandler.h>
 
-// create objects
+uint8_t lower_temperature_limit;
+uint8_t high_temperature_limit;
+uint8_t actual_temperature_offset;
+float measured_temperature;
 
+// create objects
 OneWire oneWire(temp_reading_pin);
 DallasTemperature sensors(&oneWire);
 
@@ -19,11 +23,35 @@ void temperature_reading_init(){
   // define fake pullup pin as output and set it to +5V
   pinMode(fake_pullup_pin, OUTPUT);
   digitalWrite(fake_pullup_pin, HIGH);
-  read_temperature_constants(&lower_temperature_limit, &high_temperature_limit, &actual_temperature_offset);
+  lower_temperature_limit = get_temperature_from_EEPROM(LOW_LIMIT);
+  high_temperature_limit = get_temperature_from_EEPROM(HIGH_LIMIT);
+  actual_temperature_offset = get_temperature_from_EEPROM(OFFSET);
 }
 
-void read_temperature(float measured_temperature){
+void read_temperature(){
   sensors.requestTemperatures();
   measured_temperature = sensors.getTempCByIndex(0) - actual_temperature_offset;
 }
 
+
+int get_temperature_info(uint8_t requested_value){
+  switch (requested_value)
+  {
+  case LOW_LIMIT:
+    return lower_temperature_limit;
+    break;
+  case HIGH_LIMIT:
+    return high_temperature_limit;
+    break;
+  case OFFSET:
+    return actual_temperature_offset;
+    break;
+  
+  default:
+    break;
+  }
+}
+
+float get_current_temperature_info(){
+  return measured_temperature;
+}

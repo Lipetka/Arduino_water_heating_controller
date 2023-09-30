@@ -16,15 +16,17 @@
 #include <DallasTemperature.h>
 #include <EEPROMHandler.h>
 
-uint8_t lower_temperature_limit;
-uint8_t high_temperature_limit;
-uint8_t actual_temperature_offset;
-float measured_temperature;
+extern uint8_t lower_temperature_limit;
+extern uint8_t high_temperature_limit;
+extern uint8_t actual_temperature_offset;
+extern float measured_temperature;
 
 const uint8_t temp_reading_pin = 3;
 const uint8_t fake_pullup_pin = 2;
 
 void temperature_reading_init();
-void read_temperature(float measured_temperature);
+void read_temperature();
+int get_temperature_info(uint8_t requested_value);
+float get_current_temperature_info();
 
 #endif

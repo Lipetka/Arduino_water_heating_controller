@@ -15,12 +15,12 @@
 
 #include "DisplayShow.h"
 #include "EncoderHandler.h"
-//#include "TemperatureHandler.h"
+#include "TemperatureHandler.h"
 #include "EEPROMHandler.h"
 
 // DEFINES =============================================
 
-//#define DEBUG
+#define DEBUG
 
 // Pins
 #define RELAY_PIN 4
@@ -43,7 +43,6 @@ void displayTaskCallback();
 void readTempCallback();
 
 // GLOBAL VARIABLES ====================================
-
 unsigned long debugRefreshTimer = 0;
 
 // Variables used by temperature monitoring
@@ -61,13 +60,13 @@ uint8_t maxMenuCount = 2; // number of menu options (0 included, 2 => 3 items)
 // OBJECTS =============================================
 Scheduler scheduler;
 
-//Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
-//Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
+Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
+Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
 
 // MAIN CODE ===============================================
 
 void setup() {
-  //temperature_reading_init();
+  temperature_reading_init();
   // initialize pins
   //pinMode(ENCODER_BUTTON_PIN, INPUT);
   //pinMode(RELAY_PIN, OUTPUT);
@@ -86,14 +85,14 @@ void loop() {
     Serial.println("TBD");
     // output measured temperature
     Serial.print("Current measured temperature: ");
-    Serial.println(tempActual);
+    Serial.println(get_current_temperature_info());
     // output other info about temperature
     Serial.print("Higher limit: ");
-    //Serial.print(higherTempLimit);
+    Serial.print(get_temperature_info(HIGH_LIMIT));
     Serial.print(" Lower limit: ");
-    Serial.print(&lower_temperature_limit);
+    Serial.print(get_temperature_info(LOW_LIMIT));
     Serial.print(" Temp offset: ");
-    //Serial.println(actualTempOffset);
+    Serial.println(get_temperature_info(OFFSET));
     Serial.println("-----------------------");
     debugRefreshTimer = millis();
   }
@@ -109,12 +108,11 @@ void loop() {
 
   scheduler.execute();
 }
-/*
+
 void displayTaskCallback(){
   //displayShow();
 }
 
 void readTempCallback(){
-  //read_temperature(&tempActual);
+  read_temperature();
 }
-*/
