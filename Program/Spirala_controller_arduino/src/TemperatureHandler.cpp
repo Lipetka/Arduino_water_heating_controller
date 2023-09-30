@@ -8,27 +8,22 @@
  */
 
 
-#include "TemperatureHandler.h"
+#include <TemperatureHandler.h>
 
 // create objects
 
-OneWire oneWire(3);
+OneWire oneWire(temp_reading_pin);
 DallasTemperature sensors(&oneWire);
-
-// set used pins
-
-const int temp_reading_pin = 3;
-const int fake_pullup_pin = 2;
 
 void temperature_reading_init(){
   // define fake pullup pin as output and set it to +5V
   pinMode(fake_pullup_pin, OUTPUT);
   digitalWrite(fake_pullup_pin, HIGH);
+  read_temperature_constants(&lower_temperature_limit, &high_temperature_limit, &actual_temperature_offset);
 }
 
-void read_temperature(float* actual_temperature){
-  // TODO: get temp in thread 
+void read_temperature(float measured_temperature){
   sensors.requestTemperatures();
-  *actual_temperature = sensors.getTempCByIndex(0) - actualTempOffset;
+  measured_temperature = sensors.getTempCByIndex(0) - actual_temperature_offset;
 }
 

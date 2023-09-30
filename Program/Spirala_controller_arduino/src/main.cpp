@@ -11,16 +11,16 @@
 #include <Arduino.h>
 #include <Wire.h> 
 #include <stdio.h>
+#include "TaskScheduler.h"
+
 #include "DisplayShow.h"
 #include "EncoderHandler.h"
-#include <stdio.h>
-#include <EEPROM.h>
-#include "TaskScheduler.h"
-#include "TemperatureHandler.h"
+//#include "TemperatureHandler.h"
+#include "EEPROMHandler.h"
 
 // DEFINES =============================================
 
-#define DEBUG
+//#define DEBUG
 
 // Pins
 #define RELAY_PIN 4
@@ -46,17 +46,8 @@ void readTempCallback();
 
 unsigned long debugRefreshTimer = 0;
 
-// EEPROM addresses (saved as variables to be accesses globally)
-uint8_t TEMP_OFFSET_EEPROM_ADDRESS =  0xA0;
-uint8_t TEMP_LOW_ADDRESS = 0xB0;
-uint8_t TEMP_HIGH_ADDRESS = 0xC0;
-
 // Variables used by temperature monitoring
 unsigned long temperature_read_rate = 10000;
-uint16_t lowerTempLimit = EEPROM.get(TEMP_LOW_ADDRESS, lowerTempLimit); 
-uint16_t higherTempLimit = EEPROM.get(TEMP_HIGH_ADDRESS, higherTempLimit);
-int8_t actualTempOffset = EEPROM.get(TEMP_OFFSET_EEPROM_ADDRESS, actualTempOffset);
-float tempActual = 0;
 
 // Variables used by display control
 uint8_t changingValue = 0;
@@ -70,17 +61,17 @@ uint8_t maxMenuCount = 2; // number of menu options (0 included, 2 => 3 items)
 // OBJECTS =============================================
 Scheduler scheduler;
 
-Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
-Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
+//Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
+//Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
 
 // MAIN CODE ===============================================
 
 void setup() {
-  temperature_reading_init();
+  //temperature_reading_init();
   // initialize pins
-  pinMode(ENCODER_BUTTON_PIN, INPUT);
-  pinMode(RELAY_PIN, OUTPUT);
-  displayInit();  // initialize display (external file)
+  //pinMode(ENCODER_BUTTON_PIN, INPUT);
+  //pinMode(RELAY_PIN, OUTPUT);
+  //displayInit();  // initialize display (external file)
   Serial.begin(9600);
   scheduler.startNow();
 }
@@ -98,39 +89,32 @@ void loop() {
     Serial.println(tempActual);
     // output other info about temperature
     Serial.print("Higher limit: ");
-    Serial.print(higherTempLimit);
+    //Serial.print(higherTempLimit);
     Serial.print(" Lower limit: ");
-    Serial.print(lowerTempLimit);
+    Serial.print(&lower_temperature_limit);
     Serial.print(" Temp offset: ");
-    Serial.println(actualTempOffset);
+    //Serial.println(actualTempOffset);
     Serial.println("-----------------------");
     debugRefreshTimer = millis();
   }
   #endif
  
   // Handle encoder -------------------------------------------
-  checkButtonPress();
-  if(changingValue){
-    changeValue(currentPosition);
-  }else{
-    menuSelect();
-  }
+  //checkButtonPress();
+  //if(changingValue){
+  //  changeValue(currentPosition);
+  //}else{
+  //  menuSelect();
+  //}
 
   scheduler.execute();
-
-  // Relay control ----------------------------------------------------------------
-  // TODO: add continous ON state protection
-  if(tempActual < lowerTempLimit){
-    RELAY_ON;
-  }else if(tempActual >= higherTempLimit){
-    RELAY_OFF;
-  }
 }
-
+/*
 void displayTaskCallback(){
-  displayShow(lowerTempLimit, higherTempLimit, tempActual, currentPosition, changingValue);
+  //displayShow();
 }
 
 void readTempCallback(){
-  read_temperature(&tempActual);
+  //read_temperature(&tempActual);
 }
+*/

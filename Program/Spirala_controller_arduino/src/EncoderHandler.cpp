@@ -37,6 +37,7 @@ void menuSelect() {
  */
 int changeValue(uint8_t chosenPosition){
 
+  /*
   switch (chosenPosition)
   {
   case 0:
@@ -54,6 +55,7 @@ int changeValue(uint8_t chosenPosition){
   default:
     return 0;
   }
+  */
 }
 
 /**
@@ -72,13 +74,15 @@ void checkButtonPress(){
     changingValue = 0;
     myEncoder.write(0); // to reset arrow to zero position
 
+    /* TODO: write to eeprom
     if(currentPosition == 0){
-      EEPROM.put(TEMP_LOW_ADDRESS, lowerTempLimit);
+      set_lower_temperature_limit();
     }else if(currentPosition == 1){
       EEPROM.put(TEMP_OFFSET_EEPROM_ADDRESS, actualTempOffset);
     }else if(currentPosition == 2){
       EEPROM.put(TEMP_HIGH_ADDRESS, higherTempLimit);
     }
+    */
     while(digitalRead(ENCODER_BUTTON_PIN) == LOW){} //TODO: get rid of while
   }
 }

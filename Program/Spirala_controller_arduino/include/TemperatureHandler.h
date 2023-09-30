@@ -7,15 +7,24 @@
  * 
  */
 
-#ifndef TEMP_HANDLER_H
-#define TEMP_HANDLER_H
+#ifndef TEMPERATURE_HANDLER_H
+#define TEMPERATURE_HANDLER_H
 
 #include <Arduino.h>
 #include <stdio.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <EEPROMHandler.h>
 
-void read_temperature(float* actual_temperature);
+uint8_t lower_temperature_limit;
+uint8_t high_temperature_limit;
+uint8_t actual_temperature_offset;
+float measured_temperature;
+
+const uint8_t temp_reading_pin = 3;
+const uint8_t fake_pullup_pin = 2;
+
 void temperature_reading_init();
+void read_temperature(float measured_temperature);
 
 #endif
