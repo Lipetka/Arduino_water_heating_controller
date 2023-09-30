@@ -17,6 +17,8 @@
 
 #define DISPLAY_REFRESH_RATE 300
 
+extern int backlight_timer;
+
 void displayShow(uint8_t chosenVariable, bool changingValue);
 void displayInit();
 

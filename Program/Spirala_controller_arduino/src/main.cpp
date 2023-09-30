@@ -39,24 +39,22 @@ void checkRelayTaskCallback();
 
 // Variables used by display control
 uint8_t changingValue = 0;
+int8_t currentPosition = 0;
+uint8_t maxMenuCount = 2; // number of menu options (0 included, 2 => 3 items)
 
+// SCHEDULER =============================================
 const int display_refresh_rate = 250;
 const unsigned long temperature_read_rate = 10000;
 const uint8_t encoder_read_rate = 10;
 const uint16_t debug_print_rate = 1000;
 
-// global control variables
-int8_t currentPosition = 0;
-uint8_t maxMenuCount = 2; // number of menu options (0 included, 2 => 3 items)
-
-// OBJECTS =============================================
 Scheduler scheduler;
 
 Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
 Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
 Task encoderTask(encoder_read_rate, TASK_FOREVER, &encoderTaskCallback, &scheduler, true);
 Task debugTask(debug_print_rate, TASK_FOREVER, &debugTaskCallback, &scheduler, true);
-Task checkRelayTask(1000, TASK_FOREVER, &checkRelayTaskCallback, &scheduler, true);
+Task checkRelayTask(debug_print_rate, TASK_FOREVER, &checkRelayTaskCallback, &scheduler, true);
 
 // MAIN CODE ===============================================
 
@@ -66,15 +64,17 @@ void setup() {
   heater_relay_init();
   encoderInit();
   displayInit();  
+
   // begin serial output
   Serial.begin(9600);
+
   // setup scheduler
   scheduler.startNow();
 }
 
 void loop() {
 
-  scheduler.execute();
+  scheduler.execute(); // run scheduler tasks
 
 }
 
@@ -124,5 +124,7 @@ void debugTaskCallback(){
     Serial.println(get_temperature_info(OFFSET));
     Serial.print("Relay state: ");
     Serial.println(heater_on_flag);
+    Serial.print("Emergency shutdown: ");
+    Serial.println(emergency_shutdown_flag);
     Serial.println("-----------------------");
 }

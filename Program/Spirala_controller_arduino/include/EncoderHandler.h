@@ -15,6 +15,7 @@
 #include <Encoder.h>
 #include <TemperatureHandler.h>
 #include <EEPROMHandler.h>
+#include <DisplayHandler.h>
 
 const int ENCODER_BUTTON_PIN = 7;
 const int ENCODER_A_PIN = 6;

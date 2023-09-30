@@ -13,6 +13,8 @@
 
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 
+int backlight_timer = 0;
+
 /**
  * @brief Initiates LCD display
  * 
@@ -30,6 +32,14 @@ void displayInit(){
 void displayShow(uint8_t currentPosition, bool changingValue){
     lcd.clear();
 
+    backlight_timer++; // increase every *disp_refresh_rate* ms
+    if(backlight_timer >= 20){
+        lcd.noBacklight();
+        backlight_timer = 25; // manually ceil timer to 25
+        return;
+    }
+
+    lcd.backlight();
     lcd.setCursor(0,0); // COL, ROW
     lcd.print("MIN");
     lcd.setCursor(0,1);

@@ -73,7 +73,6 @@ void checkButtonPress(){
   if(digitalRead(ENCODER_BUTTON_PIN) == LOW && changingValue == 0){
     changingValue = 1;
     while(digitalRead(ENCODER_BUTTON_PIN) == LOW){}
-
   }else if(digitalRead(ENCODER_BUTTON_PIN) == LOW && changingValue == 1){
     changingValue = 0;
     myEncoder.write(0); // to reset arrow to zero position
@@ -87,8 +86,11 @@ void checkButtonPress(){
       set_higher_temperature_limit(high_temperature_limit);
     }
     
-    while(digitalRead(ENCODER_BUTTON_PIN) == LOW){} //TODO: get rid of while
+    while(digitalRead(ENCODER_BUTTON_PIN) == LOW){}
+  }else{
+    return;
   }
+  backlight_timer = 0; // set backlight timer to 0 to reset it
 }
 
 /**
@@ -102,9 +104,11 @@ int encoderValueRead(){
 
     if(newEncoderValue > oldEncoderValue + 3){
         oldEncoderValue = newEncoderValue;
+        backlight_timer = 0; // reset backlight timer when moving with encoder
         return 1;
     }else if(newEncoderValue < oldEncoderValue - 3){
         oldEncoderValue = newEncoderValue;
+        backlight_timer = 0; // reset backlight timer when moving with encoder
         return -1;
     }else{
         return 0;
