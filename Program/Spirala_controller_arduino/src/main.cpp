@@ -16,18 +16,15 @@
 #include "TaskScheduler.h"
 
 // PROJECT SPECIFIC LIBRARIES
-#include "DisplayShow.h"
+#include "DisplayHandler.h"
 #include "EncoderHandler.h"
 #include "TemperatureHandler.h"
 #include "EEPROMHandler.h"
+#include "RelayHandler.h"
 
 // DEFINES =============================================
 
 #define DEBUG // keep defined
-
-// Pins
-#define RELAY_PIN 4
-
 
 // RELAY control
 #define RELAY_ON digitalWrite(RELAY_PIN,HIGH)
@@ -40,6 +37,7 @@
 // scheduler callback
 void displayTaskCallback();
 void readTempCallback();
+void encoderTaskCallback();
 
 // GLOBAL VARIABLES ====================================
 unsigned long debugRefreshTimer = 0;
@@ -48,7 +46,8 @@ unsigned long debugRefreshTimer = 0;
 uint8_t changingValue = 0;
 
 const int display_refresh_rate = 250;
-unsigned long temperature_read_rate = 10000;
+const unsigned long temperature_read_rate = 10000;
+const uint8_t encoder_read_rate = 10;
 
 // global control variables
 int8_t currentPosition = 0;
@@ -59,14 +58,14 @@ Scheduler scheduler;
 
 Task displayRefreshTask(display_refresh_rate, TASK_FOREVER, &displayTaskCallback, &scheduler, true);
 Task temperatureReadTask(temperature_read_rate, TASK_FOREVER, &readTempCallback, &scheduler, true);
+Task encoderTask(encoder_read_rate, TASK_FOREVER, &encoderTaskCallback, &scheduler, true);
 
 // MAIN CODE ===============================================
 
 void setup() {
   temperature_reading_init();
-  // initialize pins
+  heater_relay_init();
   //pinMode(ENCODER_BUTTON_PIN, INPUT);
-  //pinMode(RELAY_PIN, OUTPUT);
   displayInit();  // initialize display (external file)
   Serial.begin(9600);
   scheduler.startNow();
@@ -90,20 +89,24 @@ void loop() {
     Serial.print(get_temperature_info(HIGH_LIMIT));
     Serial.print(" Temp offset: ");
     Serial.println(get_temperature_info(OFFSET));
+    Serial.print("Relay state: ");
+    Serial.println(heater_on_flag);
     Serial.println("-----------------------");
     debugRefreshTimer = millis();
   }
   #endif
- 
-  // Handle encoder -------------------------------------------
+
+  scheduler.execute();
+
+}
+
+void encoderTaskCallback(){
   checkButtonPress();
   if(changingValue){
     changeValue(currentPosition);
   }else{
     menuSelect();
   }
-
-  scheduler.execute();
 }
 
 void displayTaskCallback(){
